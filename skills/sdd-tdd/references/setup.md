@@ -27,6 +27,7 @@ Use the **Write tool** to create `.claude/sdd-tdd-status.json`. Fill in `feature
   "test_files": [],
   "test_commands": {},
   "team": {},
+  "coordination_pattern": null,
   "phases": {
     "spec":      { "status": "pending", "completed_at": null },
     "test":      { "status": "pending", "completed_at": null, "red_verified": false },

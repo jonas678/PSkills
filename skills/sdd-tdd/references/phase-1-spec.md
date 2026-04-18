@@ -42,10 +42,18 @@ Update status: `phases.spec.status = "in_progress"`
 - Before/after for any interface or contract that changes
 
 **Team Composition & Coordination**
-- Which agents will be spawned in Phase 2 and Phase 3
+
+Apply the coordination-patterns decision procedure to Phase 3 *before* writing this section. Ask:
+
+- Are there 2–6 bounded domains the orchestrator will direct one at a time or in parallel? → **Orchestrator-Subagent**: orchestrator spawns each agent, collects output, decides next step.
+- Are there N truly independent long-running items where each agent should run the full cycle autonomously (implement → run own tests → fix failures → report)? → **Agent Teams**: agents work end-to-end without orchestrator check-ins between steps.
+
+Then state in the plan:
+- Chosen coordination pattern and why
+- Which agents will be spawned (QA in Phase 2 + Phase 3 verifier, plus implementation agents)
 - What each agent is responsible for
-- Cross-agent dependencies and how they'll be resolved (shared types, sequencing)
-- Example: "QA (Phase 2 author + Phase 3 verifier) + Frontend Agent + Backend Agent in parallel"
+- How Agent Teams agents differ from Orchestrator-Subagent agents in their briefing: Agent Teams agents are briefed to run their full test suite and fix failures autonomously before reporting back; Orchestrator-Subagent agents stop and return after each implementation step for the orchestrator to synthesize
+- Cross-agent dependencies and how they'll be resolved upfront (shared types, sequencing)
 
 ---
 
@@ -84,6 +92,7 @@ Only ask for layers the spec actually involves. Store these — they will be use
    - `spec_file`: `"docs/specs/<feature-slug>.md"`
    - `test_commands`: only layers that exist (backend, frontend, e2e)
    - `team`: one entry per agent decided in the plan
+   - `coordination_pattern`: `"orchestrator-subagent"` or `"agent-teams"`
    - `phases.spec.status`: `"completed"`
    - `phases.spec.completed_at`: current ISO timestamp
 3. Write the complete JSON back with the Write tool
