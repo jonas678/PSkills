@@ -1,0 +1,24 @@
+{
+  "name": "pskills",
+  "id": "pskills",
+  "owner": {
+    "name": "jonas678"
+  },
+  "metadata": {
+    "description": "A collection of Claude Code skills for spec-first development, agent coordination, and browser automation",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "pskills",
+      "source": "./",
+      "description": "SDD-TDD spec-first development workflow, multi-agent coordination patterns, and Playwright browser automation",
+      "version": "1.0.0",
+      "author": {
+        "name": "jonas678"
+      },
+      "keywords": ["sdd", "tdd", "spec", "coordination", "playwright", "workflow"],
+      "category": "workflow"
+    }
+  ]
+}
