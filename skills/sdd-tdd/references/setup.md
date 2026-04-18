@@ -52,9 +52,13 @@ Write `.claude/hooks/sdd-tdd-check.sh` (pure bash — no Python or jq required):
 
 ```bash
 #!/bin/bash
-# Reads docs/specs/*/status.json using grep/sed only — no runtime dependencies.
+# Exit codes:
+#   0 = allow stop (no active phase, or only pending phases not yet started)
+#   2 = block stop (a phase is in_progress) — stdout is fed back to Claude as a message
 
 extract() { grep "\"$1\"" "$2" | head -1 | sed 's/.*"'"$1"'": *"\([^"]*\)".*/\1/'; }
+
+blocked=0
 
 for status_file in docs/specs/*/status.json; do
     [ -f "$status_file" ] || continue
@@ -84,10 +88,26 @@ for status_file in docs/specs/*/status.json; do
     if [ "$test_status" = "in_progress" ] && [ "$red_verified" != "true" ]; then
         echo "[sdd-tdd] ⚠ Tests written but RED not verified yet"
     fi
+
+    # Block stop only when a phase is actively in_progress.
+    # Pending (not yet started) phases do not block — avoids interfering with
+    # parallel sessions that haven't touched the sdd-tdd flow.
+    if [ "$spec_status" = "in_progress" ] || \
+       [ "$test_status" = "in_progress" ] || \
+       [ "$impl_status" = "in_progress" ]; then
+        echo "[sdd-tdd] ⛔ A phase is in progress — complete it before stopping."
+        blocked=1
+    fi
 done
+
+exit $blocked
 ```
 
 Then: `chmod +x .claude/hooks/sdd-tdd-check.sh`
+
+**How blocking works:** When `exit 2` fires, Claude Code feeds the hook's stdout back to Claude as a new message — Claude reads it and continues working instead of stopping. Exit `0` (no in_progress phase) allows the session to stop normally.
+
+**Parallel session note:** The block only triggers when a phase is `in_progress`. A normal chat session running alongside will only be blocked if it stops while an sdd-tdd phase is actively in progress — which is acceptable, since that state means the sdd-tdd work is unfinished in this project.
 
 ## 4. Register in project settings
 
