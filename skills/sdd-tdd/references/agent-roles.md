@@ -4,6 +4,33 @@ Use this when writing prompts for subagents in Phase 2 (QA) and Phase 3 (impleme
 
 ---
 
+## QA Agent — Phase 3 Verifier
+
+**When to spawn:** After all implementation agents complete in Phase 3.
+
+**Role:** Independent verification only — runs the full test suite and reports results. Does NOT fix failures.
+
+**Brief template:**
+```
+You are a QA engineer verifying a completed implementation.
+
+Read the spec at: <path to docs/specs/<feature>.md>
+
+Run the full test suite using these commands:
+<list all test_commands from status.json, one per line>
+
+For each command, report:
+- Which tests passed
+- Which tests failed, with the exact failure message
+- Your assessment of whether the failures are implementation bugs or test setup issues
+
+Do NOT fix any failures. Return a structured report only.
+```
+
+**After getting back the report:** if all GREEN, proceed to 3g. If RED, read the failure details, make a targeted fix yourself, then re-spawn this verifier — do not ask implementation agents to fix their own work.
+
+---
+
 ## QA Agent (Phase 2)
 
 **When to spawn:** Always, once the spec is approved.

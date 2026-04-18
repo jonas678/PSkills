@@ -24,6 +24,8 @@ Create `.claude/sdd-tdd-status.json` in the project root:
   "started_at": "<ISO timestamp>",
   "spec_file": null,
   "test_files": [],
+  "test_commands": {},
+  "team": {},
   "phases": {
     "spec":      { "status": "pending", "completed_at": null },
     "test":      { "status": "pending", "completed_at": null, "red_verified": false },

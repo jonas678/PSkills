@@ -6,36 +6,30 @@ Goal: write tests from the spec (not from the implementation), then confirm they
 
 **2a.** Update status: `phases.test.status = "in_progress"`
 
-**2b. Apply coordination-patterns** to decide how to produce the test drafts:
+**2b. Read the team from status.json** (`team` field). The QA agent's responsibilities and which layers to cover were decided and approved in Phase 1 — no re-derivation needed here.
 
-- If the spec is small (1–2 endpoints, one layer) → draft test cases yourself inline; skip spawning a QA agent
-- If the spec covers multiple layers (backend + frontend + E2E) → **Orchestrator-Subagent**: spawn a QA agent per layer in parallel, each reading the spec and returning descriptions for their layer
-- If the spec is large but single-layer → one QA agent, single subagent
-
-The QA agent always returns descriptions only (no code) — that keeps the plan mode review manageable.
-
-**2c. Spawn QA agent(s)** as decided above. The agent starts cold — brief it fully:
+**2c. Spawn the QA agent.** The agent starts cold — brief it fully:
 - Path to the spec file
 - Testing framework, language, and test commands from `status.json → test_commands`
-- Layers involved: frontend, backend, E2E (only what the spec covers)
-- Coverage required per layer (see below)
-- Return format: structured list of descriptions only (no code yet)
+- Layers to cover: read from `status.json → team` (frontend, backend, E2E — only what was decided)
+- Coverage requirements per layer (see below)
+- Return format: structured list of test case descriptions only (no code yet)
 
 **Coverage requirements by layer:**
 
-*Backend API tests* — the most critical for spec-driven TDD. For each endpoint in the spec's Components/Interface section:
-- Call the endpoint via HTTP (Supertest, httpx, `net/http/httptest`, etc.) — not unit tests on internal functions
-- Assert exact response: status code, response body shape, field names and types
-- Negative cases: invalid input → assert the error format and status code defined in the spec
-- Auth cases: unauthenticated request → assert 401/403 as specified
+*Backend API tests* — the most critical for spec-driven TDD. For each endpoint in the spec:
+- Call via HTTP transport level (Supertest, httpx, `net/http/httptest`, etc.) — not unit tests on internal functions
+- Assert exact response: status code, body shape, field names and types
+- Negative cases: invalid input → error format and status code from spec
+- Auth cases: unauthenticated → 401/403 as specified
 
-*Frontend tests* — component/unit level:
+*Frontend tests*:
 - Render with valid props → assert expected output
 - User interactions (click, type) → assert state changes or emitted events
 - Error states → assert error UI renders correctly
 
 *E2E tests (Playwright)* — full user flows only, not per-endpoint:
-- The main success journey described in the spec
+- Main success journey described in the spec
 - One or two critical failure journeys
 
 See `references/agent-roles.md` → QA Agent section for the brief template.
@@ -48,7 +42,7 @@ Wait for user to approve, add, or remove tests.
 
 **2e. Exit plan mode.** Write the actual test code based on the approved list. Save to the project's test directory.
 
-**2f. Run the tests** using the commands confirmed in Phase 1 (`status.json → test_commands`). They MUST be RED (all failing).
+**2f. Run the tests** using the commands from `status.json → test_commands`. They MUST be RED (all failing).
 
 If any pass unexpectedly: investigate whether the feature partially exists. Tell the user — do not proceed until you understand why.
 
