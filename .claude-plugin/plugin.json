@@ -1,0 +1,8 @@
+{
+  "name": "sdd-tdd-workflow",
+  "description": "Spec-first, test-driven development workflow with plan mode gates and multi-agent coordination. Includes sdd-tdd (three-phase SDD → TDD → implement skill) and coordination-patterns (decision aid for shaping multi-step work).",
+  "author": {
+    "name": "Jonas",
+    "email": "s15318123@gmail.com"
+  }
+}
