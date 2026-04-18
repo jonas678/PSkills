@@ -34,19 +34,22 @@ Goal: write tests from the spec (not from the implementation), then confirm they
 
 See `references/agent-roles.md` → QA Agent section for the brief template.
 
-**2d. Enter plan mode.** Present the QA agent's proposed test cases:
+**2d. Write the test cases to `docs/specs/<feature-slug>-test-cases.md`** using the Write tool. This is the raw QA agent output — descriptions only, no code. Structure it exactly as returned: grouped by layer, with test name, what it tests, input/precondition, and expected outcome for each entry.
+
+**2e. Enter plan mode.** Present the QA agent's proposed test cases (reference the saved file):
 - Each test name and purpose
 - Any coverage gaps or risky areas you notice
 
-Wait for user to approve, add, or remove tests.
+Wait for user to approve, add, or remove tests. Update `docs/specs/<feature-slug>-test-cases.md` to reflect any changes made during approval before exiting plan mode.
 
-**2e. Exit plan mode.** Write the actual test code based on the approved list. Save to the project's test directory.
+**2f. Exit plan mode.** Write the actual test code based on the approved list. Save to the project's test directory.
 
-**2f. Run the tests** using the commands from `status.json → test_commands`. They MUST be RED (all failing).
+**2g. Run the tests** using the commands from `status.json → test_commands`. They MUST be RED (all failing).
 
 If any pass unexpectedly: investigate whether the feature partially exists. Tell the user — do not proceed until you understand why.
 
-**2g. Update status.json** using Read → merge → Write (never bash/jq):
+**2h. Update status.json** using Read → merge → Write (never bash/jq):
+- `test_cases_file`: `"docs/specs/<feature-slug>-test-cases.md"`
 - `test_files`: list of written test file paths
 - `phases.test.status`: `"completed"`
 - `phases.test.completed_at`: current ISO timestamp

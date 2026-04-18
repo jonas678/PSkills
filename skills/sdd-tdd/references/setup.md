@@ -23,6 +23,7 @@ Use the **Write tool** to create `.claude/sdd-tdd-status.json`. Fill in `feature
   "mode": null,
   "started_at": "<ISO 8601 timestamp e.g. 2026-04-18T10:30:00Z>",
   "spec_file": null,
+  "test_cases_file": null,
   "test_files": [],
   "test_commands": {},
   "team": {},

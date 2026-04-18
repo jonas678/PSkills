@@ -61,6 +61,7 @@ Claude creates two files in your project:
   "mode": null,
   "started_at": "2026-04-18T10:00:00Z",
   "spec_file": null,
+  "test_cases_file": null,
   "test_files": [],
   "test_commands": {},
   "team": {},
@@ -157,12 +158,14 @@ E2E (Playwright):
 Approve, or add/remove tests?
 ```
 
-After approval, tests are written:
+Claude writes the test case list to `docs/specs/user-login-jwt-test-cases.md` (descriptions only, no code), then enters plan mode. After approval, test code is written:
 ```
+docs/specs/
+└── user-login-jwt-test-cases.md   ← approved test case descriptions
 tests/
-├── test_auth_api.py       ← backend HTTP contract tests
+├── test_auth_api.py               ← backend HTTP contract tests
 └── e2e/
-    └── login.spec.ts      ← Playwright E2E tests
+    └── login.spec.ts              ← Playwright E2E tests
 ```
 
 Tests run — must all **FAIL (RED)**:
@@ -213,7 +216,8 @@ your-project/
 │   ├── hooks/sdd-tdd-check.sh                 ← phase reminder hook
 │   └── sdd-tdd-status.user-login-jwt.json     ← archived (flow complete)
 ├── docs/specs/
-│   └── user-login-jwt.md                      ← the spec (from approved plan)
+│   ├── user-login-jwt.md                      ← the spec (from approved plan)
+│   └── user-login-jwt-test-cases.md           ← approved test case descriptions
 ├── tests/
 │   ├── test_auth_api.py                       ← backend API tests
 │   └── e2e/login.spec.ts                      ← Playwright E2E tests
