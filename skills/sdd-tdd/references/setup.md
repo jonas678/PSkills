@@ -111,4 +111,6 @@ Merge into `.claude/settings.json` (create if needed; append if keys already exi
 
 The `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` flag is required for the Agent Teams coordination pattern. It is set unconditionally — it has no effect when Orchestrator-Subagent is used.
 
-Tell the user: "Phase tracker initialized at `docs/specs/<feature-slug>/status.json`. A project-scoped hook will remind you of incomplete phases — it won't affect other projects."
+**Note on parallel sessions:** This hook fires on Stop for *every* Claude Code session in this project folder — including normal chat sessions running alongside the sdd-tdd session. Those sessions will also see the phase reminder at the end of each turn while a flow is in progress. This is a platform limitation; hooks have no access to which session triggered them. The reminder is informational only and does not block anything. It goes silent automatically once all phases are completed.
+
+Tell the user: "Phase tracker initialized at `docs/specs/<feature-slug>/status.json`. A project-scoped hook will remind you of incomplete phases — note it will also appear in any other Claude Code sessions open in this folder while the flow is active."
