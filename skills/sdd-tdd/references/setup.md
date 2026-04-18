@@ -14,14 +14,14 @@ This preserves the history of every completed flow. The hook only watches `sdd-t
 
 ## 2. Initialize status.json
 
-Create `.claude/sdd-tdd-status.json` in the project root:
+Use the **Write tool** to create `.claude/sdd-tdd-status.json`. Fill in `feature`, `description`, and `started_at` (current ISO timestamp) before writing — never leave them as placeholders.
 
 ```json
 {
-  "feature": "<feature-slug>",
-  "description": "<user's feature description>",
+  "feature": "<feature-slug e.g. user-auth>",
+  "description": "<one-line description of what is being built>",
   "mode": null,
-  "started_at": "<ISO timestamp>",
+  "started_at": "<ISO 8601 timestamp e.g. 2026-04-18T10:30:00Z>",
   "spec_file": null,
   "test_files": [],
   "test_commands": {},
@@ -33,6 +33,8 @@ Create `.claude/sdd-tdd-status.json` in the project root:
   }
 }
 ```
+
+**Never update this file with bash or jq.** Always: Read the file → merge changes in memory → Write the full JSON back.
 
 ## 2. Write the hook script
 

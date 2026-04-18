@@ -46,3 +46,15 @@ Enter each phase only when the previous one is complete. Read the phase referenc
 - Never skip the RED check before implementation
 - Update `status.json` at every phase transition (the hook depends on it)
 - When in doubt, ask — ambiguities caught in Phase 1 cost nothing; in Phase 3 they're expensive
+
+## How to update status.json
+
+**Always use Read → Edit/Write tools. Never use bash/jq commands to modify status.json.**
+
+```
+1. Read the current .claude/sdd-tdd-status.json with the Read tool
+2. Merge your changes into the full JSON object in memory
+3. Write the complete updated JSON back with the Write tool
+```
+
+Bash jq commands fail on whitespace, trailing commas, or any slight JSON irregularity. The Read/Write approach is always safe.
