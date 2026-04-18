@@ -54,16 +54,25 @@ For both patterns, every agent brief must include:
 
 See `references/agent-roles.md` for Frontend, Backend, Database, and Full-Stack brief templates.
 
-**3f. Spawn QA agent as verifier.** After all implementation agents complete:
-- Brief: spec path, all test files, all test run commands
-- QA runs the full test suite and reports per-test pass/fail with failure details
-- QA does NOT fix failures — it reports what's failing and why
+**3f. MANDATORY: Spawn QA agent as verifier.**
 
-If RED after QA verification: read QA's report, make a targeted fix, re-spawn QA to verify again. Do not re-implement from scratch.
+> **Do NOT run tests yourself here. Do NOT treat `npm test`, `pytest`, or any test command as a substitute for this step. The QA agent must be spawned as a separate Agent call.**
+
+This is a required gate — `green_verified` cannot be set to `true` without it.
+
+Spawn the QA agent using the brief template in `references/agent-roles.md → QA Agent — Phase 3 Verifier`. The brief must include:
+- Spec file path
+- Test case descriptions file (`status.json → test_cases_file`)
+- All test file paths (`status.json → test_files`)
+- All test run commands (`status.json → test_commands`)
+
+The QA agent runs the full suite and returns a structured per-test pass/fail report. It does NOT fix failures.
+
+If any tests are RED: read QA's report, make a targeted fix yourself, then re-spawn the QA agent to verify again. Repeat until all GREEN. Do not re-implement from scratch.
 
 **3g. Update status.json** using Read → merge → Write (never bash/jq):
 - `phases.implement.status`: `"completed"`
 - `phases.implement.completed_at`: current ISO timestamp
 - `phases.implement.green_verified`: `true`
 
-Tell the user: implementation complete, tests GREEN. The hook will go silent — all phases done.
+Tell the user: implementation complete, QA verified GREEN. The hook will go silent — all phases done.

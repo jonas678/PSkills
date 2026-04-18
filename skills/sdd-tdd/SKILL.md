@@ -11,7 +11,7 @@ Three phases, each gated by plan mode approval. You are the orchestrator through
 SETUP  → check resume status → init .claude/sdd-tdd-status.json + project hook
 PHASE 1 (SPEC)     → plan mode → approve → write spec → update status
 PHASE 2 (TEST)     → QA agent → plan mode → approve → write tests → verify RED → update status
-PHASE 3 (IMPLEMENT)→ plan mode → approve → spawn agents → verify GREEN → update status
+PHASE 3 (IMPLEMENT)→ plan mode → approve → spawn impl agents → spawn QA verifier agent → GREEN → update status
 ```
 
 ---
@@ -44,6 +44,7 @@ Enter each phase only when the previous one is complete. Read the phase referenc
 - Plan mode is a real gate — incorporate corrections fully before proceeding
 - The spec file is the source of truth for all agents
 - Never skip the RED check before implementation
+- **Never run tests yourself at the end of Phase 3** — always spawn the QA verifier Agent; running `npm test` or any test command directly is not a substitute
 - Update `status.json` at every phase transition (the hook depends on it)
 - When in doubt, ask — ambiguities caught in Phase 1 cost nothing; in Phase 3 they're expensive
 
