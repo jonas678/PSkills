@@ -18,12 +18,12 @@ PHASE 3 (IMPLEMENT)→ plan mode → approve → spawn impl agents → spawn QA 
 
 ## Start here: check for existing flow
 
-Before anything, check if `.claude/sdd-tdd-status.json` exists:
-- **All phases completed** → archive it to `.claude/sdd-tdd-status.<feature-slug>.json`, then start fresh
-- **Some phases incomplete** → resume from the first incomplete phase; skip completed ones
-- **No file** → fresh start
+Before anything, search for `docs/specs/*/status.json`:
+- **Found with incomplete phases** → resume from the first incomplete phase; skip completed ones
+- **Found but all completed** → start a new feature subfolder
+- **None found** → fresh start
 
-Then read **`references/setup.md`** and follow it to initialize status.json and install the project-scoped hook.
+Then read **`references/setup.md`** and follow it to initialize the feature folder, status.json, and the project-scoped hook.
 
 ---
 

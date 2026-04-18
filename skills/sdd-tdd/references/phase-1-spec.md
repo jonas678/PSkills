@@ -72,7 +72,7 @@ Add any of these if they help the user evaluate the design:
 
 Wait for approval. Incorporate any corrections fully. Do not write the spec file until the user approves.
 
-**1d. Exit plan mode.** Write the spec to `docs/specs/<feature-slug>.md` using the **Write tool**. The approved plan content is still in your context — write the spec directly from it. Plan mode does not save files; do not attempt to copy or reference any plan file path. No fixed template; the plan's structure IS the spec structure.
+**1d. Exit plan mode.** Write the spec to `docs/specs/<feature-slug>/spec.md` using the **Write tool**. The approved plan content is still in your context — write the spec directly from it. Plan mode does not save files; do not attempt to copy or reference any plan file path. No fixed template; the plan's structure IS the spec structure.
 
 **1e. Confirm test commands.** Ask the user to confirm the exact commands for each layer the spec involves:
 
@@ -86,10 +86,10 @@ Only ask for layers the spec actually involves. Store these — they will be use
 
 **1f. Update status.json** using Read → merge → Write (never bash/jq):
 
-1. Read `.claude/sdd-tdd-status.json`
+1. Read `docs/specs/<feature-slug>/status.json`
 2. Merge these fields into the full JSON:
    - `mode`: `"new-feature"` or `"enhancement"`
-   - `spec_file`: `"docs/specs/<feature-slug>.md"`
+   - `spec_file`: `"docs/specs/<feature-slug>/spec.md"`
    - `test_commands`: only layers that exist (backend, frontend, e2e)
    - `team`: one entry per agent decided in the plan
    - `coordination_pattern`: `"orchestrator-subagent"` or `"agent-teams"`

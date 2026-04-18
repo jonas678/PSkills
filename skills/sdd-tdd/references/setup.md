@@ -1,20 +1,28 @@
 # Setup: Status File + Project Hook
 
-## 1. Archive any completed flow
+## Folder structure
 
-Before creating a new status.json, check if one already exists and all phases are completed:
+All sdd-tdd artifacts for a feature live in one subfolder:
 
-```bash
-# If .claude/sdd-tdd-status.json exists and all phases are "completed":
-# read the feature slug from the file, then rename it
-mv .claude/sdd-tdd-status.json .claude/sdd-tdd-status.<feature-slug>.json
+```
+docs/specs/<feature-slug>/
+├── spec.md          ← design document (written after Phase 1 approval)
+├── test-cases.md    ← approved QA test case descriptions (written in Phase 2)
+└── status.json      ← flow tracking for this feature
 ```
 
-This preserves the history of every completed flow. The hook only watches `sdd-tdd-status.json` (the active flow), so archived files are ignored automatically.
+Each feature gets its own subfolder. No naming conflicts, no archiving needed — completed flows stay in place and the hook ignores them automatically.
 
-## 2. Initialize status.json
+## 1. Check for an existing in-progress flow
 
-Use the **Write tool** to create `.claude/sdd-tdd-status.json`. Fill in `feature`, `description`, and `started_at` (current ISO timestamp) before writing — never leave them as placeholders.
+Search for any `docs/specs/*/status.json` that has at least one phase not completed:
+- Found with incomplete phases → resume from the first incomplete phase; skip completed ones
+- Found but all phases completed → start a new feature (create a new subfolder)
+- None found → fresh start
+
+## 2. Initialize the feature folder and status.json
+
+Create `docs/specs/<feature-slug>/` and write `docs/specs/<feature-slug>/status.json` using the **Write tool**. Fill in `feature`, `description`, and `started_at` (current ISO timestamp) — never leave them as placeholders.
 
 ```json
 {
@@ -36,42 +44,47 @@ Use the **Write tool** to create `.claude/sdd-tdd-status.json`. Fill in `feature
 }
 ```
 
-**Never update this file with bash or jq.** Always: Read the file → merge changes in memory → Write the full JSON back.
+**Never update this file with bash or jq.** Always: Read → merge in memory → Write the full JSON back.
 
-## 2. Write the hook script
+## 3. Write the hook script
 
 Write `.claude/hooks/sdd-tdd-check.sh`:
 
 ```bash
 #!/bin/bash
-STATUS_FILE=".claude/sdd-tdd-status.json"
-[ -f "$STATUS_FILE" ] || exit 0
-
 python3 - <<'EOF'
-import json, sys
+import glob, json, sys
 
-with open(".claude/sdd-tdd-status.json") as f:
-    s = json.load(f)
+files = glob.glob("docs/specs/*/status.json")
+if not files:
+    sys.exit(0)
 
-phases = s.get("phases", {})
 order = ["spec", "test", "implement"]
 labels = {"spec": "Phase 1 (SPEC)", "test": "Phase 2 (TEST)", "implement": "Phase 3 (IMPLEMENT)"}
 
-pending = [labels[p] for p in order if phases.get(p, {}).get("status") != "completed"]
-if not pending:
-    sys.exit(0)
+for path in sorted(files):
+    try:
+        with open(path) as f:
+            s = json.load(f)
+    except Exception:
+        continue
 
-print(f"\n[sdd-tdd] Active flow: {s.get('feature', '?')} — {s.get('description', '')[:60]}")
-print(f"[sdd-tdd] Pending: {', '.join(pending)}")
+    phases = s.get("phases", {})
+    pending = [labels[p] for p in order if phases.get(p, {}).get("status") != "completed"]
+    if not pending:
+        continue
 
-if phases.get("test", {}).get("status") == "in_progress" and not phases.get("test", {}).get("red_verified"):
-    print("[sdd-tdd] ⚠ Tests written but RED not verified yet")
+    print(f"\n[sdd-tdd] Active flow: {s.get('feature', '?')} — {s.get('description', '')[:60]}")
+    print(f"[sdd-tdd] Pending: {', '.join(pending)}")
+
+    if phases.get("test", {}).get("status") == "in_progress" and not phases.get("test", {}).get("red_verified"):
+        print("[sdd-tdd] ⚠ Tests written but RED not verified yet")
 EOF
 ```
 
 Then: `chmod +x .claude/hooks/sdd-tdd-check.sh`
 
-## 3. Register in project settings
+## 4. Register in project settings
 
 Merge into `.claude/settings.json` (create if needed; append if keys already exist):
 
@@ -91,6 +104,6 @@ Merge into `.claude/settings.json` (create if needed; append if keys already exi
 }
 ```
 
-The `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` flag is required for the Agent Teams coordination pattern to work. It is set here unconditionally — it has no effect when the flow uses Orchestrator-Subagent, so enabling it upfront is safe.
+The `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` flag is required for the Agent Teams coordination pattern. It is set unconditionally — it has no effect when Orchestrator-Subagent is used.
 
-Tell the user: "Phase tracker initialized at `.claude/sdd-tdd-status.json`. A project-scoped hook will remind you of incomplete phases — it won't affect other projects."
+Tell the user: "Phase tracker initialized at `docs/specs/<feature-slug>/status.json`. A project-scoped hook will remind you of incomplete phases — it won't affect other projects."

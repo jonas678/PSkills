@@ -4,7 +4,7 @@ Goal: write tests from the spec (not from the implementation), then confirm they
 
 ## Steps
 
-**2a.** Update status using Read → merge → Write (never bash/jq): set `phases.test.status = "in_progress"` in the full JSON and write it back.
+**2a.** Update `docs/specs/<feature-slug>/status.json` using Read → merge → Write (never bash/jq): set `phases.test.status = "in_progress"` in the full JSON and write it back.
 
 **2b. Read the team from status.json** (`team` field). The QA agent's responsibilities and which layers to cover were decided and approved in Phase 1 — no re-derivation needed here.
 
@@ -34,13 +34,13 @@ Goal: write tests from the spec (not from the implementation), then confirm they
 
 See `references/agent-roles.md` → QA Agent section for the brief template.
 
-**2d. Write the test cases to `docs/specs/<feature-slug>-test-cases.md`** using the Write tool. This is the raw QA agent output — descriptions only, no code. Structure it exactly as returned: grouped by layer, with test name, what it tests, input/precondition, and expected outcome for each entry.
+**2d. Write the test cases to `docs/specs/<feature-slug>/test-cases.md`** using the Write tool. This is the raw QA agent output — descriptions only, no code. Structure it exactly as returned: grouped by layer, with test name, what it tests, input/precondition, and expected outcome for each entry.
 
 **2e. Enter plan mode.** Present the QA agent's proposed test cases (reference the saved file):
 - Each test name and purpose
 - Any coverage gaps or risky areas you notice
 
-Wait for user to approve, add, or remove tests. Update `docs/specs/<feature-slug>-test-cases.md` to reflect any changes made during approval before exiting plan mode.
+Wait for user to approve, add, or remove tests. Update `docs/specs/<feature-slug>/test-cases.md` to reflect any changes made during approval before exiting plan mode.
 
 **2f. Exit plan mode.** Write the actual test code based on the approved list. Save to the project's test directory.
 
@@ -48,8 +48,8 @@ Wait for user to approve, add, or remove tests. Update `docs/specs/<feature-slug
 
 If any pass unexpectedly: investigate whether the feature partially exists. Tell the user — do not proceed until you understand why.
 
-**2h. Update status.json** using Read → merge → Write (never bash/jq):
-- `test_cases_file`: `"docs/specs/<feature-slug>-test-cases.md"`
+**2h. Update `docs/specs/<feature-slug>/status.json`** using Read → merge → Write (never bash/jq):
+- `test_cases_file`: `"docs/specs/<feature-slug>/test-cases.md"`
 - `test_files`: list of written test file paths
 - `phases.test.status`: `"completed"`
 - `phases.test.completed_at`: current ISO timestamp

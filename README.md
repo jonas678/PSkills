@@ -28,9 +28,10 @@ Three-phase workflow: **Spec → Test → Implement**
 - **Phase 3 (IMPLEMENT)**: Implementation agents (frontend, backend, database) run in parallel based on the team decided in Phase 1. A QA agent acts as independent verifier after implementation — it runs the full suite and reports pass/fail without fixing anything. Tests must be **GREEN**.
 
 Features:
-- Phase state tracked in `.claude/sdd-tdd-status.json` — resume mid-flow across sessions
-- Team composition decided and approved in Phase 1, read by Phases 2 and 3 — no re-derivation
-- Project-scoped hook reminds you of incomplete phases at end of each turn
+- All flow artifacts per feature in `docs/specs/<feature-slug>/` (spec, test cases, status)
+- Phase state tracked in `docs/specs/<feature-slug>/status.json` — resume mid-flow across sessions
+- Team composition and coordination pattern decided in Phase 1, read by Phases 2 and 3
+- Project-scoped hook watches `docs/specs/*/status.json` and reminds you of incomplete phases
 - Status file updated with Read → Write tools only (no bash/jq)
 
 ### `coordination-patterns`
@@ -51,9 +52,9 @@ Here's what happens when you run `/sdd-tdd user login with JWT`.
 
 ### Setup (automatic)
 
-Claude creates two files in your project:
+Claude creates the feature folder and two project-level files:
 
-**`.claude/sdd-tdd-status.json`** — tracks progress across sessions:
+**`docs/specs/user-login-jwt/status.json`** — tracks progress across sessions:
 ```json
 {
   "feature": "user-login-jwt",
@@ -65,6 +66,7 @@ Claude creates two files in your project:
   "test_files": [],
   "test_commands": {},
   "team": {},
+  "coordination_pattern": null,
   "phases": {
     "spec":      { "status": "pending", "completed_at": null },
     "test":      { "status": "pending", "completed_at": null, "red_verified": false },
@@ -73,12 +75,12 @@ Claude creates two files in your project:
 }
 ```
 
-**`.claude/hooks/sdd-tdd-check.sh`** — registered in `.claude/settings.json`. At the end of every Claude turn it prints:
+**`.claude/hooks/sdd-tdd-check.sh`** — registered in `.claude/settings.json`. Scans all `docs/specs/*/status.json` files and at the end of every Claude turn prints for any incomplete flow:
 ```
 [sdd-tdd] Active flow: user-login-jwt — user login with JWT
 [sdd-tdd] Pending: Phase 1 (SPEC), Phase 2 (TEST), Phase 3 (IMPLEMENT)
 ```
-It goes silent once all phases are complete.
+It goes silent once all phases are complete. Each new feature adds a new subfolder — no archiving or renaming needed.
 
 ---
 
@@ -120,18 +122,19 @@ Approve?
 
 You approve (or correct it). Claude writes the spec from the plan content in context:
 
-**`docs/specs/user-login-jwt.md`** — mirrors the approved plan structure exactly.
+**`docs/specs/user-login-jwt/spec.md`** — mirrors the approved plan structure exactly.
 
 Claude then records the team in status.json and confirms test commands:
 ```json
 {
   "mode": "new-feature",
-  "spec_file": "docs/specs/user-login-jwt.md",
+  "spec_file": "docs/specs/user-login-jwt/spec.md",
   "test_commands": { "backend": "pytest", "e2e": "PLAYWRIGHT_HTML_OPEN=never npx playwright test" },
   "team": {
     "qa": "Phase 2 test author + Phase 3 verifier",
     "backend": "implements AuthController, JWTService, UserRepository, JWT middleware"
-  }
+  },
+  "coordination_pattern": "orchestrator-subagent"
 }
 ```
 
@@ -158,14 +161,14 @@ E2E (Playwright):
 Approve, or add/remove tests?
 ```
 
-Claude writes the test case list to `docs/specs/user-login-jwt-test-cases.md` (descriptions only, no code), then enters plan mode. After approval, test code is written:
+Claude writes the test case list to `docs/specs/user-login-jwt/test-cases.md` (descriptions only, no code), then enters plan mode. After approval, test code is written:
 ```
-docs/specs/
-└── user-login-jwt-test-cases.md   ← approved test case descriptions
+docs/specs/user-login-jwt/
+└── test-cases.md      ← approved test case descriptions
 tests/
-├── test_auth_api.py               ← backend HTTP contract tests
+├── test_auth_api.py   ← backend HTTP contract tests
 └── e2e/
-    └── login.spec.ts              ← Playwright E2E tests
+    └── login.spec.ts  ← Playwright E2E tests
 ```
 
 Tests run — must all **FAIL (RED)**:
@@ -203,7 +206,7 @@ PASSED tests/test_auth_api.py::test_login_wrong_password
 ✓ All 7 tests GREEN.
 ```
 
-Status file is archived to `.claude/sdd-tdd-status.user-login-jwt.json`. The hook goes silent.
+All phases complete. The hook goes silent (all phases in status.json show `"completed"`).
 
 ---
 
@@ -212,17 +215,18 @@ Status file is archived to `.claude/sdd-tdd-status.user-login-jwt.json`. The hoo
 ```
 your-project/
 ├── .claude/
-│   ├── settings.json                          ← hook registered here
-│   ├── hooks/sdd-tdd-check.sh                 ← phase reminder hook
-│   └── sdd-tdd-status.user-login-jwt.json     ← archived (flow complete)
+│   ├── settings.json                     ← hook + AGENT_TEAMS flag
+│   └── hooks/sdd-tdd-check.sh            ← phase reminder hook
 ├── docs/specs/
-│   ├── user-login-jwt.md                      ← the spec (from approved plan)
-│   └── user-login-jwt-test-cases.md           ← approved test case descriptions
+│   └── user-login-jwt/
+│       ├── spec.md                       ← the spec (from approved plan)
+│       ├── test-cases.md                 ← approved QA test case descriptions
+│       └── status.json                   ← flow tracking (all phases completed)
 ├── tests/
-│   ├── test_auth_api.py                       ← backend API tests
-│   └── e2e/login.spec.ts                      ← Playwright E2E tests
+│   ├── test_auth_api.py                  ← backend API tests
+│   └── e2e/login.spec.ts                 ← Playwright E2E tests
 └── src/
-    ├── types/user.ts                          ← shared type (pre-agent)
+    ├── types/user.ts                     ← shared type (pre-agent)
     ├── controllers/auth.py
     ├── services/jwt.py
     └── repositories/user.py

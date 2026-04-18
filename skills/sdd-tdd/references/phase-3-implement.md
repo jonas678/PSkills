@@ -4,7 +4,7 @@ Goal: make the failing tests pass. The team and coordination pattern were decide
 
 ## Steps
 
-**3a.** Update status using Read → merge → Write (never bash/jq): set `phases.implement.status = "in_progress"` in the full JSON and write it back.
+**3a.** Update `docs/specs/<feature-slug>/status.json` using Read → merge → Write (never bash/jq): set `phases.implement.status = "in_progress"` in the full JSON and write it back.
 
 **3b. Read from status.json:**
 - `team` — which agents to spawn and what each owns
@@ -70,7 +70,7 @@ The QA agent runs the full suite and returns a structured per-test pass/fail rep
 
 If any tests are RED: read QA's report, make a targeted fix yourself, then re-spawn the QA agent to verify again. Repeat until all GREEN. Do not re-implement from scratch.
 
-**3g. Update status.json** using Read → merge → Write (never bash/jq):
+**3g. Update `docs/specs/<feature-slug>/status.json`** using Read → merge → Write (never bash/jq):
 - `phases.implement.status`: `"completed"`
 - `phases.implement.completed_at`: current ISO timestamp
 - `phases.implement.green_verified`: `true`
