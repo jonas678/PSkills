@@ -12,21 +12,27 @@ For Mode B: read the relevant existing files first. You can't design a change wi
 
 Update status: `phases.spec.status = "in_progress"`
 
-**1b. Analyze and identify:**
+**1b. Apply coordination-patterns** to decide how to do the analysis:
+
+- If the codebase is small or the relevant files are obvious → do it yourself with Read/Grep
+- If Mode B and the impact area is large or unclear → use an **Explore subagent** to map affected files before you start writing the outline (keeps raw search output out of your context)
+- The spec itself is always written by you (the orchestrator) — never delegate the writing
+
+**1c. Analyze and identify:**
 - Components involved (frontend, backend, API, database, etc.)
 - Main interfaces and data contracts (Mode B: current → target)
 - Impact on surrounding code (Mode B: who calls what you're changing?)
 
-**1c. Enter plan mode.** Present the SDD outline:
+**1d. Enter plan mode.** Present the spec outline:
 - Selected mode (A or B) and why
 - Sections you'll write, main components, their interactions
 - Any open questions or assumptions
 
 Wait for approval. Do not write the spec file until the user approves the outline.
 
-**1d. Exit plan mode.** Write the spec to `docs/specs/<feature-slug>.md` using `references/spec-template.md`.
+**1e. Exit plan mode.** Write the spec to `docs/specs/<feature-slug>.md` using `references/spec-template.md`.
 
-**1e. Confirm test commands.** Before closing Phase 1, ask the user to confirm the exact commands for each layer involved:
+**1g. Confirm test commands.** Before closing Phase 1, ask the user to confirm the exact commands for each layer involved:
 
 | Layer | Example command |
 |-------|----------------|
