@@ -7,7 +7,7 @@ A Claude Code plugin that enforces a spec-first, test-driven development workflo
 ### `/sdd-tdd`
 Three-phase workflow: **Spec → Test → Implement**
 
-- **Phase 1 (SPEC)**: Writes a Software Design Document (SDD) with plan mode approval before any code is written. Supports both new features (Mode A) and enhancements to existing systems (Mode B).
+- **Phase 1 (SPEC)**: Writes a specification document (SDD = Specification-Driven Development) with plan mode approval before any code is written. Supports both new features (Mode A) and enhancements to existing systems (Mode B).
 - **Phase 2 (TEST)**: A QA agent drafts test cases from the spec. Tests are approved via plan mode, then written. Tests must be **RED** (failing) before implementation starts.
 - **Phase 3 (IMPLEMENT)**: Specialized agents (frontend, backend, database) implement in parallel. Tests must be **GREEN** before the phase completes.
 
