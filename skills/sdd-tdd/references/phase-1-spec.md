@@ -64,7 +64,7 @@ Add any of these if they help the user evaluate the design:
 
 Wait for approval. Incorporate any corrections fully. Do not write the spec file until the user approves.
 
-**1d. Exit plan mode.** Write the spec to `docs/specs/<feature-slug>.md`. The spec is a formalization of the approved plan — use the same sections the plan used. No fixed template; the plan's structure IS the spec structure.
+**1d. Exit plan mode.** Write the spec to `docs/specs/<feature-slug>.md` using the **Write tool**. The approved plan content is still in your context — write the spec directly from it. Plan mode does not save files; do not attempt to copy or reference any plan file path. No fixed template; the plan's structure IS the spec structure.
 
 **1e. Confirm test commands.** Ask the user to confirm the exact commands for each layer the spec involves:
 
@@ -76,25 +76,16 @@ Wait for approval. Incorporate any corrections fully. Do not write the spec file
 
 Only ask for layers the spec actually involves. Store these — they will be used verbatim in Phase 2 (RED check) and Phase 3 (GREEN check).
 
-**1f. Update status.json:**
-```json
-{
-  "mode": "new-feature | enhancement",
-  "spec_file": "docs/specs/<feature-slug>.md",
-  "test_commands": {
-    "frontend": "npm test",
-    "backend": "pytest",
-    "e2e": "PLAYWRIGHT_HTML_OPEN=never npx playwright test"
-  },
-  "team": {
-    "qa": "Phase 2 test author + Phase 3 verifier",
-    "frontend": "implements <describe scope, e.g. LoginPage component and routing>",
-    "backend": "implements <describe scope, e.g. /auth/login and /auth/logout endpoints>"
-  },
-  "phases": {
-    "spec": { "status": "completed", "completed_at": "<ISO timestamp>" }
-  }
-}
-```
+**1f. Update status.json** using Read → merge → Write (never bash/jq):
 
-Only include team members and test commands for layers that exist. Tell the user where the spec was saved. Ask if they want to proceed to Phase 2.
+1. Read `.claude/sdd-tdd-status.json`
+2. Merge these fields into the full JSON:
+   - `mode`: `"new-feature"` or `"enhancement"`
+   - `spec_file`: `"docs/specs/<feature-slug>.md"`
+   - `test_commands`: only layers that exist (backend, frontend, e2e)
+   - `team`: one entry per agent decided in the plan
+   - `phases.spec.status`: `"completed"`
+   - `phases.spec.completed_at`: current ISO timestamp
+3. Write the complete JSON back with the Write tool
+
+Tell the user where the spec was saved. Ask if they want to proceed to Phase 2.

@@ -4,7 +4,7 @@ Goal: write tests from the spec (not from the implementation), then confirm they
 
 ## Steps
 
-**2a.** Update status: `phases.test.status = "in_progress"`
+**2a.** Update status using Read → merge → Write (never bash/jq): set `phases.test.status = "in_progress"` in the full JSON and write it back.
 
 **2b. Read the team from status.json** (`team` field). The QA agent's responsibilities and which layers to cover were decided and approved in Phase 1 — no re-derivation needed here.
 
@@ -46,14 +46,10 @@ Wait for user to approve, add, or remove tests.
 
 If any pass unexpectedly: investigate whether the feature partially exists. Tell the user — do not proceed until you understand why.
 
-**2g. Update status.json:**
-```json
-{
-  "test_files": ["<path to test file(s)>"],
-  "phases": {
-    "test": { "status": "completed", "completed_at": "<ISO timestamp>", "red_verified": true }
-  }
-}
-```
+**2g. Update status.json** using Read → merge → Write (never bash/jq):
+- `test_files`: list of written test file paths
+- `phases.test.status`: `"completed"`
+- `phases.test.completed_at`: current ISO timestamp
+- `phases.test.red_verified`: `true`
 
 Confirm RED status to the user. Ask if they want to proceed to Phase 3.

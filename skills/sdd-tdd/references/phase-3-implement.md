@@ -4,7 +4,7 @@ Goal: make the failing tests pass. The team composition was decided and approved
 
 ## Steps
 
-**3a.** Update status: `phases.implement.status = "in_progress"`
+**3a.** Update status using Read → merge → Write (never bash/jq): set `phases.implement.status = "in_progress"` in the full JSON and write it back.
 
 **3b. Read the team from status.json** (`team` field). The agents and their responsibilities were approved in Phase 1. If the spec scope changed substantially since then, note it and confirm with the user before proceeding.
 
@@ -33,13 +33,9 @@ See `references/agent-roles.md` for Frontend, Backend, Database, and Full-Stack 
 
 If RED after QA verification: read QA's report, make a targeted fix, re-spawn QA to verify again. Do not re-implement from scratch.
 
-**3g. Update status.json:**
-```json
-{
-  "phases": {
-    "implement": { "status": "completed", "completed_at": "<ISO timestamp>", "green_verified": true }
-  }
-}
-```
+**3g. Update status.json** using Read → merge → Write (never bash/jq):
+- `phases.implement.status`: `"completed"`
+- `phases.implement.completed_at`: current ISO timestamp
+- `phases.implement.green_verified`: `true`
 
 Tell the user: implementation complete, tests GREEN. The hook will go silent — all phases done.
