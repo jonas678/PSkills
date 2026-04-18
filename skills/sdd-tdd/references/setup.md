@@ -48,38 +48,43 @@ Create `docs/specs/<feature-slug>/` and write `docs/specs/<feature-slug>/status.
 
 ## 3. Write the hook script
 
-Write `.claude/hooks/sdd-tdd-check.sh`:
+Write `.claude/hooks/sdd-tdd-check.sh` (pure bash — no Python or jq required):
 
 ```bash
 #!/bin/bash
-python3 - <<'EOF'
-import glob, json, sys
+# Reads docs/specs/*/status.json using grep/sed only — no runtime dependencies.
 
-files = glob.glob("docs/specs/*/status.json")
-if not files:
-    sys.exit(0)
+extract() { grep "\"$1\"" "$2" | head -1 | sed 's/.*"'"$1"'": *"\([^"]*\)".*/\1/'; }
 
-order = ["spec", "test", "implement"]
-labels = {"spec": "Phase 1 (SPEC)", "test": "Phase 2 (TEST)", "implement": "Phase 3 (IMPLEMENT)"}
+for status_file in docs/specs/*/status.json; do
+    [ -f "$status_file" ] || continue
 
-for path in sorted(files):
-    try:
-        with open(path) as f:
-            s = json.load(f)
-    except Exception:
-        continue
+    feature=$(extract feature "$status_file")
+    description=$(extract description "$status_file" | cut -c1-60)
 
-    phases = s.get("phases", {})
-    pending = [labels[p] for p in order if phases.get(p, {}).get("status") != "completed"]
-    if not pending:
-        continue
+    # Each phase is on one line: "spec": { "status": "...", ... }
+    # Use [^_] to avoid matching spec_file, test_commands, test_files etc.
+    spec_status=$(grep '"spec"[^_]' "$status_file" | sed 's/.*"status": *"\([^"]*\)".*/\1/')
+    test_status=$(grep '"test"[^_c]' "$status_file" | sed 's/.*"status": *"\([^"]*\)".*/\1/')
+    impl_status=$(grep '"implement"' "$status_file" | sed 's/.*"status": *"\([^"]*\)".*/\1/')
 
-    print(f"\n[sdd-tdd] Active flow: {s.get('feature', '?')} — {s.get('description', '')[:60]}")
-    print(f"[sdd-tdd] Pending: {', '.join(pending)}")
+    pending=""
+    [ "$spec_status" != "completed" ]  && pending="${pending}Phase 1 (SPEC), "
+    [ "$test_status" != "completed" ]  && pending="${pending}Phase 2 (TEST), "
+    [ "$impl_status" != "completed" ]  && pending="${pending}Phase 3 (IMPLEMENT), "
+    pending="${pending%, }"
 
-    if phases.get("test", {}).get("status") == "in_progress" and not phases.get("test", {}).get("red_verified"):
-        print("[sdd-tdd] ⚠ Tests written but RED not verified yet")
-EOF
+    [ -z "$pending" ] && continue
+
+    echo ""
+    echo "[sdd-tdd] Active flow: $feature — $description"
+    echo "[sdd-tdd] Pending: $pending"
+
+    red_verified=$(grep '"red_verified"' "$status_file" | sed 's/.*"red_verified": *\(true\|false\).*/\1/')
+    if [ "$test_status" = "in_progress" ] && [ "$red_verified" != "true" ]; then
+        echo "[sdd-tdd] ⚠ Tests written but RED not verified yet"
+    fi
+done
 ```
 
 Then: `chmod +x .claude/hooks/sdd-tdd-check.sh`
