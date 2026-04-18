@@ -21,21 +21,7 @@ If the spec scope changed substantially since Phase 1, note it and confirm with 
 
 Wait for user approval.
 
-**3d. Exit plan mode.**
-
-If `coordination_pattern` is `"agent-teams"`: update `.claude/settings.json` to enable the feature flag before spawning anything. Read the file (or create it if absent), merge in the env block, and write it back:
-
-```json
-{
-  "env": {
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
-  }
-}
-```
-
-Without this flag, Agent Teams will not work — the agents will run but without the team coordination mechanism.
-
-Then write shared types, interfaces, or API contracts to files. Agents cannot coordinate with each other mid-flight — all shared state must be resolved upfront.
+**3d. Exit plan mode.** Write shared types, interfaces, or API contracts to files before spawning. Agents cannot coordinate with each other mid-flight — all shared state must be resolved upfront.
 
 **3e. Spawn implementation agents** following the chosen pattern:
 

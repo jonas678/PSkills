@@ -73,10 +73,13 @@ Then: `chmod +x .claude/hooks/sdd-tdd-check.sh`
 
 ## 3. Register in project settings
 
-Merge into `.claude/settings.json` (create if needed; append if Stop hooks already exist):
+Merge into `.claude/settings.json` (create if needed; append if keys already exist):
 
 ```json
 {
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
   "hooks": {
     "Stop": [
       {
@@ -87,5 +90,7 @@ Merge into `.claude/settings.json` (create if needed; append if Stop hooks alrea
   }
 }
 ```
+
+The `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` flag is required for the Agent Teams coordination pattern to work. It is set here unconditionally — it has no effect when the flow uses Orchestrator-Subagent, so enabling it upfront is safe.
 
 Tell the user: "Phase tracker initialized at `.claude/sdd-tdd-status.json`. A project-scoped hook will remind you of incomplete phases — it won't affect other projects."
