@@ -1,6 +1,18 @@
 # Setup: Status File + Project Hook
 
-## 1. Initialize status.json
+## 1. Archive any completed flow
+
+Before creating a new status.json, check if one already exists and all phases are completed:
+
+```bash
+# If .claude/sdd-tdd-status.json exists and all phases are "completed":
+# read the feature slug from the file, then rename it
+mv .claude/sdd-tdd-status.json .claude/sdd-tdd-status.<feature-slug>.json
+```
+
+This preserves the history of every completed flow. The hook only watches `sdd-tdd-status.json` (the active flow), so archived files are ignored automatically.
+
+## 2. Initialize status.json
 
 Create `.claude/sdd-tdd-status.json` in the project root:
 

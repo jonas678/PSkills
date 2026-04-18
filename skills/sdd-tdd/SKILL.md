@@ -19,7 +19,7 @@ PHASE 3 (IMPLEMENT)→ plan mode → approve → spawn agents → verify GREEN �
 ## Start here: check for existing flow
 
 Before anything, check if `.claude/sdd-tdd-status.json` exists:
-- **All phases completed** → tell user, ask if starting fresh (will overwrite)
+- **All phases completed** → archive it to `.claude/sdd-tdd-status.<feature-slug>.json`, then start fresh
 - **Some phases incomplete** → resume from the first incomplete phase; skip completed ones
 - **No file** → fresh start
 
