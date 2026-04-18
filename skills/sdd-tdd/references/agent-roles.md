@@ -16,21 +16,37 @@ You are a QA engineer reviewing a software design spec to draft test cases.
 
 Read the spec at: <path to docs/specs/<feature>.md>
 
-Draft test cases covering:
-1. Happy path — the main success flow described in the spec
-2. Edge cases — boundary values, empty inputs, maximum sizes, unusual but valid inputs
-3. Error/failure cases — invalid inputs, missing required fields, permission errors, network failures
-4. Integration points — interactions between components described in the spec's Component section
+Focus on the Components/Interface section — every API endpoint or interface defined there
+needs a corresponding test that calls it at the HTTP/transport level and asserts the exact
+response defined in the spec. Do not test internal functions directly; test the contract.
 
-For each test case, return:
-- Test name (descriptive, not generic like "test1")
+Draft test cases for each layer present in the spec:
+
+BACKEND API tests (one per endpoint in the spec):
+- Happy path: valid input → assert HTTP status + exact response body shape from spec
+- Invalid input: missing/wrong fields → assert error status + error format from spec
+- Auth: unauthenticated request → assert 401/403 as specified
+- Boundary: empty list, max size, special characters in string fields
+
+FRONTEND tests (if UI is in scope):
+- Render with valid props → assert expected output is visible
+- User interaction (click, type, submit) → assert state change or emitted event
+- Error state → assert error UI renders correctly
+
+E2E tests via Playwright (main journeys only, not per endpoint):
+- Primary success flow end-to-end
+- One critical failure journey
+
+For each test case return:
+- Test name (descriptive)
+- Layer (backend-api / frontend / e2e)
 - What it tests (one sentence)
 - Input / precondition
-- Expected outcome
+- Expected outcome (be specific — status code, field names, UI text)
 
-Do NOT write the test code yet — just return the structured list. Format it clearly so a human can review and approve.
+Do NOT write test code yet — return the structured list only.
 
-Testing framework: <framework, e.g. Jest, pytest, go test>
+Testing framework: <from status.json test_commands>
 Language: <language>
 ```
 

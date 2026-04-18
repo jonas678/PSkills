@@ -8,9 +8,27 @@ Goal: write tests from the spec (not from the implementation), then confirm they
 
 **2b. Spawn a QA agent** to draft test case descriptions. The agent starts cold — brief it fully:
 - Path to the spec file
-- Testing framework and language (ask user if unknown)
-- Coverage required: happy path, edge cases, error/failure cases, boundary conditions
+- Testing framework, language, and test commands from `status.json → test_commands`
+- Layers involved: frontend, backend, E2E (only what the spec covers)
+- Coverage required per layer (see below)
 - Return format: structured list of descriptions only (no code yet)
+
+**Coverage requirements by layer:**
+
+*Backend API tests* — the most critical for spec-driven TDD. For each endpoint in the spec's Components/Interface section:
+- Call the endpoint via HTTP (Supertest, httpx, `net/http/httptest`, etc.) — not unit tests on internal functions
+- Assert exact response: status code, response body shape, field names and types
+- Negative cases: invalid input → assert the error format and status code defined in the spec
+- Auth cases: unauthenticated request → assert 401/403 as specified
+
+*Frontend tests* — component/unit level:
+- Render with valid props → assert expected output
+- User interactions (click, type) → assert state changes or emitted events
+- Error states → assert error UI renders correctly
+
+*E2E tests (Playwright)* — full user flows only, not per-endpoint:
+- The main success journey described in the spec
+- One or two critical failure journeys
 
 See `references/agent-roles.md` → QA Agent section for the brief template.
 
