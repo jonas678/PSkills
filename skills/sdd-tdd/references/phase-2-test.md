@@ -22,7 +22,7 @@ Wait for user to approve, add, or remove tests.
 
 **2d. Exit plan mode.** Write the actual test code based on the approved list. Save to the project's test directory.
 
-**2e. Run the tests.** They MUST be RED (all failing).
+**2e. Run the tests** using the commands confirmed in Phase 1 (`status.json → test_commands`). They MUST be RED (all failing).
 
 If any pass unexpectedly: investigate whether the feature partially exists. Tell the user — do not proceed until you understand why.
 

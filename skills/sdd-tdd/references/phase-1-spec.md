@@ -26,15 +26,30 @@ Wait for approval. Do not write the spec file until the user approves the outlin
 
 **1d. Exit plan mode.** Write the spec to `docs/specs/<feature-slug>.md` using `references/sdd-template.md`.
 
-**1e. Update status.json:**
+**1e. Confirm test commands.** Before closing Phase 1, ask the user to confirm the exact commands for each layer involved:
+
+| Layer | Example command |
+|-------|----------------|
+| Frontend unit/component | `npm test` or `npx vitest` |
+| Backend unit/integration | `pytest`, `go test ./...`, `npm test` |
+| E2E (Playwright) | `PLAYWRIGHT_HTML_OPEN=never npx playwright test` |
+
+Only ask for layers that the spec actually involves. Store the confirmed commands — they will be used verbatim for the RED check in Phase 2 and the GREEN check in Phase 3.
+
+**1f. Update status.json:**
 ```json
 {
   "mode": "new-feature | enhancement",
   "spec_file": "docs/specs/<feature-slug>.md",
+  "test_commands": {
+    "frontend": "npm test",
+    "backend": "pytest",
+    "e2e": "PLAYWRIGHT_HTML_OPEN=never npx playwright test"
+  },
   "phases": {
     "spec": { "status": "completed", "completed_at": "<ISO timestamp>" }
   }
 }
 ```
 
-Tell the user where the spec was saved. Ask if they want to proceed to Phase 2.
+Only include keys for layers that exist. Tell the user where the spec was saved. Ask if they want to proceed to Phase 2.

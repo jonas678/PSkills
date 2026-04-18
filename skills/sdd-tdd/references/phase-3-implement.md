@@ -34,7 +34,7 @@ Wait for user approval.
 - The test run command
 - Any shared contract files from 3d
 
-**3f. Run the full test suite.** Must be GREEN.
+**3f. Run the full test suite** using the commands from `status.json → test_commands`. Run all layers (frontend, backend, E2E) that were confirmed in Phase 1. Must be GREEN.
 
 If tests still fail: read the failure, fix the specific issue, re-run. Don't re-implement from scratch.
 
