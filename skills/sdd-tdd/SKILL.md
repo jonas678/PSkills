@@ -1,3 +1,4 @@
+
 ---
 name: sdd-tdd
 description: Three-phase skill that combines Specification-Driven Development (SDD), Test-Driven Development (TDD), plan mode human gates, and multi-agent coordination. Use this whenever the user types /sdd-tdd, wants to design-then-test-then-implement a feature, asks for spec-first development, wants a QA agent to write tests before code, or says things like "write the spec first", "design before code", "spec → test → implement", or "I want to plan before building". The skill enforces: spec approval → tests written and RED → implementation → tests GREEN. Always trigger this skill when the user invokes /sdd-tdd.
