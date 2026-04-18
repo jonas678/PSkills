@@ -24,7 +24,7 @@ Update status: `phases.spec.status = "in_progress"`
 
 Wait for approval. Do not write the spec file until the user approves the outline.
 
-**1d. Exit plan mode.** Write the spec to `docs/specs/<feature-slug>.md` using `references/sdd-template.md`.
+**1d. Exit plan mode.** Write the spec to `docs/specs/<feature-slug>.md` using `references/spec-template.md`.
 
 **1e. Confirm test commands.** Before closing Phase 1, ask the user to confirm the exact commands for each layer involved:
 

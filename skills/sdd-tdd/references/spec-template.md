@@ -1,4 +1,4 @@
-# SDD Template
+# Spec Template
 
 Two modes — pick one based on the nature of the work:
 
@@ -12,7 +12,7 @@ Fill every section. If something is genuinely unknown, write "TBD: <reason>" rat
 ## Mode A: New Feature
 
 ```markdown
-# SDD: <Feature Name>
+# Spec: <Feature Name>
 
 **Date:** <date>
 **Mode:** New Feature
@@ -81,7 +81,7 @@ List anything still unresolved. Resolve before Phase 2 or explicitly accept as a
 Use this when modifying something that already exists. The key difference is capturing **as-is** vs **to-be** and the **impact** on the surrounding system.
 
 ```markdown
-# SDD: <Change Name>
+# Spec: <Change Name>
 
 **Date:** <date>
 **Mode:** Enhancement / Update
