@@ -4,9 +4,11 @@ Goal: align on *what* is being built and *how* it will be delivered before a sin
 
 ## Steps
 
-**1a. Determine the change mode:**
+**1a. Determine the change mode and prerequisites:**
 - **Mode A (New Feature)** — the thing being built doesn't exist yet
 - **Mode B (Enhancement/Update)** — modifying something that already exists
+
+*Important Integration Note:* If the user has already used the **prd-planner** skill to generate a PRD and handoff briefs (like `Engineering-Brief.md`), **do not reinvent the wheel**. Read those documents first to act as the foundation for this Spec. The SDD should focus strictly on technical architecture, API contracts, and implementation details rather than re-litigating product boundaries.
 
 For Mode B: read the relevant existing files first. You can't design a change without understanding what's already there.
 
@@ -22,17 +24,19 @@ Update status: `phases.spec.status = "in_progress"`
 
 ### Required sections
 
-**Refined Requirements**
+**Refined Requirements / Input Review**
+- **Note:** If a `PRD.md` or `Engineering-Brief.md` exists (e.g. generated via `prd-planner`), explicitly reference it here instead of restating it.
 - User story and acceptance criteria
 - What is explicitly out of scope
-- Ambiguities resolved before proceeding — if anything is unclear, resolve it here, not in Phase 3
+- Ambiguities resolved before proceeding
 
 **As-Is** *(skip only if Mode A with no related existing code)*
 - What currently exists: components, files, interfaces, behavior
 - Pain points or gaps this change addresses
 
-**Technical Design**
-- API contracts, data models, component boundaries
+**Technical Design (SDD)**
+- This section is the core Software Design Document (SDD).
+- API contracts, data models, database schemas, component boundaries
 - Key architectural decisions and tradeoffs
 - Any non-obvious implementation choices
 

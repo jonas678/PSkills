@@ -1,0 +1,4 @@
+interface:
+  display_name: "PRD Planner"
+  short_description: "Clarify requirements, build PRDs, and prepare team/agent handoff docs"
+  default_prompt: "Use $prd-planner to help me clarify requirements, structure a PRD, expand into supporting docs, and prepare handoff materials for design, engineering, QA, or multi-agent execution."

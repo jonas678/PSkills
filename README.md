@@ -19,6 +19,16 @@ cp -r /tmp/PSkills/skills/* ~/.claude/skills/
 
 ## Skills included
 
+### `/prd-planner`
+
+**The PM-first Product Requirement Planner**
+
+Turn vague product requests into structured planning outputs that can progress from discovery to PRD, supporting documents, and team handoff.
+- **Requirement clarification**: Ask high-impact questions first to shape new systems or existing feature enhancements.
+- **Handoff & Execution**: Generate role-specific briefs (Designer, Engineering, QA) with direct-copy prompts.
+- **Automated Swarm Teams**: Automatically sets up an Agent Team (using `TeamCreate` and `run_in_background`) so the PM session orchestrates downstream Designer, QA, and Engineering agents without context pollution.
+- **Seamlessly integrates with `/sdd-tdd`**: Passes the generated `PRD.md` and `Engineering-Brief.md` directly to the development workflow.
+
 ### `/sdd-tdd`
 
 Three-phase workflow: **Spec → Test → Implement**
