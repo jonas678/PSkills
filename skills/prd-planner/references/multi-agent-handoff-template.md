@@ -99,6 +99,8 @@ List the key pages and flows.
 
 #### 4.6 Required design principles
 Examples:
+- You **MUST invoke the `/frontend-design` skill** to produce your visual artifacts and code.
+- Emphasize bold, non-generic aesthetics per the `/frontend-design` guidelines.
 - prioritize clarity over decoration
 - prioritize task efficiency and error recovery
 - include empty / loading / error / validation / no-data states
@@ -106,8 +108,8 @@ Examples:
 
 #### 4.7 Required output
 Specify what the designer should produce in this round. Example:
+- Production-grade HTML/CSS/JS prototypes or React/Vue components (generated via the `/frontend-design` skill).
 - information architecture
-- low-fidelity wireframes
 - key interaction notes
 - states coverage
 - open decision list for PM
