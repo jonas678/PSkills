@@ -46,6 +46,7 @@ Each agent runs the full cycle autonomously — implement → run tests → fix 
 - After all agents return: review the reports; if any failures remain, make a targeted fix yourself and re-run the affected tests
 
 For both patterns, every agent brief must include:
+- A strict instruction to **invoke the `/karpathy-guidelines` skill** to ensure code is simple, surgical, and not over-engineered.
 - Spec file path (agents must read it)
 - Test case descriptions file path (`status.json → test_cases_file`)
 - Test file path(s) they own
