@@ -94,3 +94,10 @@ Decision aid for shaping non-trivial work. Helps choose between doing work solo,
 
 ### `playwright-cli`
 Automates browser interactions and Playwright test workflows within Claude Code sessions. Natively invoked by `/qa-engineer` during E2E test verification.
+
+### `/karpathy-guidelines`
+**The Behavioral Anti-Slop Filter**
+A set of foundational behavioral rules derived from Andrej Karpathy's observations on LLM coding pitfalls.
+- **Simplicity First**: Prevents overcomplication, bloated abstractions, and speculative feature creep.
+- **Surgical Changes**: Stops Claude from randomly refactoring adjacent code or deleting comments it doesn't fully understand.
+- **Goal-Driven Execution**: Enforces a "define success criteria -> loop until verified" mindset, perfectly complementing the TDD workflow.
