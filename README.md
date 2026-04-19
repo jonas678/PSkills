@@ -4,11 +4,30 @@ A complete Claude Code plugin suite that turns your terminal into a multi-agent 
 
 ## Installation
 
-```bash
-claude plugin install jonas678/PSkills
+Before installing the plugin, you must configure this repository as a known marketplace in your global `.claude/settings.json`.
+
+**Step 1:** Run `claude config add extraKnownMarketplaces.pskills '{"source": "github", "repo": "jonas678/PSkills"}'` or manually add it to `~/.claude/settings.json`:
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "pskills": {
+      "source": {
+        "source": "github",
+        "repo": "jonas678/PSkills"
+      }
+    }
+  }
+}
 ```
 
-Or manually:
+**Step 2:** Install the plugin via the Claude CLI:
+
+```bash
+claude plugin install pskills
+```
+
+Or manually (for development):
 
 ```bash
 git clone https://github.com/jonas678/PSkills /tmp/PSkills
