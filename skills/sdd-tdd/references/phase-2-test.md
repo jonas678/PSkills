@@ -8,12 +8,12 @@ Goal: write tests from the spec (not from the implementation), then confirm they
 
 **2b. Read the team from status.json** (`team` field). The QA agent's responsibilities and which layers to cover were decided and approved in Phase 1 — no re-derivation needed here.
 
-**2c. Spawn the QA agent.** The agent starts cold — brief it fully:
-- Path to the spec file
-- Testing framework, language, and test commands from `status.json → test_commands`
-- Layers to cover: read from `status.json → team` (frontend, backend, E2E — only what was decided)
-- Coverage requirements per layer (see below)
-- Return format: structured list of test case descriptions only (no code yet)
+**2c. Spawn the QA agent.** The agent starts cold — brief it fully by asking it to invoke the `/qa-engineer` skill:
+- Pass the path to the spec file
+- Tell it to run in **Mode 2: Test Writing / TDD Red Phase**
+- Give it the testing framework, language, and test commands from `status.json → test_commands`
+- Give it the layers to cover: read from `status.json → team` (frontend, backend, E2E — only what was decided)
+- Require it to return a structured list of test case descriptions first, and then to write the test code.
 
 **Coverage requirements by layer:**
 

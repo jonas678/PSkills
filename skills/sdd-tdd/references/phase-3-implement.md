@@ -60,7 +60,7 @@ See `references/agent-roles.md` for Frontend, Backend, Database, and Full-Stack 
 
 This is a required gate — `green_verified` cannot be set to `true` without it.
 
-Spawn the QA agent using the brief template in `references/agent-roles.md → QA Agent — Phase 3 Verifier`. The brief must include:
+Spawn the QA agent and explicitly tell it to use the **`/qa-engineer`** skill in **Mode 3: Independent Verification / TDD Green Phase**. The brief must include:
 - Spec file path
 - Test case descriptions file (`status.json → test_cases_file`)
 - All test file paths (`status.json → test_files`)

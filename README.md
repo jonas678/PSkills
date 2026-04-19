@@ -29,6 +29,15 @@ Turn vague product requests into structured planning outputs that can progress f
 - **Automated Swarm Teams**: Automatically sets up an Agent Team (using `TeamCreate` and `run_in_background`) so the PM session orchestrates downstream Designer, QA, and Engineering agents without context pollution.
 - **Seamlessly integrates with `/sdd-tdd`**: Passes the generated `PRD.md` and `Engineering-Brief.md` directly to the development workflow.
 
+### `/qa-engineer`
+
+**The Dedicated Quality Assurance Agent**
+
+A specialized agent skill designed to enforce Test-Driven Development (TDD) and objective verification. Use this standalone or spawn it as an agent during a team Swarm.
+- **Mode 1 (Strategy)**: Reads PRDs/Briefs to output structured test dimensions, risk models, and edge cases.
+- **Mode 2 (TDD Red)**: Reads SDDs/Specs to write failing test cases (unit/e2e/integration). Strictly prohibited from writing feature implementation.
+- **Mode 3 (TDD Green / Verify)**: Independently runs test suites and reports PASS/FAIL logs back to the orchestrator. Strictly prohibited from fixing bugs itself to maintain verification integrity.
+
 ### `/sdd-tdd`
 
 Three-phase workflow: **Spec → Test → Implement**
