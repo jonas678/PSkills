@@ -50,29 +50,27 @@ Concrete shapes in Claude Code:
 
 **Avoid when:** one subagent needs another's findings partway through. The orchestrator becomes a message-relay bottleneck — just do the work yourself.
 
-### 4. Do you have N truly independent long-running items — e.g., migrate 5 services, refactor 10 files the same way?
+### 4. Do you have N truly independent long-running items — e.g., migrate 5 services, refactor 10 files the same way, or coordinate a Designer/QA/Dev feature team?
 
-Use **Agent Teams**. Same mechanism as Orchestrator-Subagent, but each Agent does *persistent, multi-step* work on one item end-to-end rather than a one-shot query.
+Use **Agent Teams (Swarm)**. Same conceptual mechanism as Orchestrator-Subagent, but each Agent does *persistent, multi-step* stateful work.
 
 Concrete shapes:
-- Parallel migrations: one Agent per service, each doing discover → migrate → test
-- Batch refactors: one Agent per file/module when the refactor pattern is uniform
-- Parallel bug fixes across genuinely independent components
+- **Feature Teams:** Spawn a team with `TeamCreate`, add a Designer, QA, and Engineering agent. Pass them prompts and use `SendMessage` to orchestrate multi-round feedback between them (this is what `/prd-planner` uses).
+- **Parallel migrations:** one Agent per service, each doing discover → migrate → test
+- **Batch refactors:** one Agent per file/module when the refactor pattern is uniform
 
-**Why this helps:** each worker accumulates deep context on its slice. Three agents with 30 focused turns each will outperform one agent juggling 90 turns of mixed context.
+**Why this helps:** each worker accumulates deep context on its slice, and `run_in_background` allows the orchestrator to stay responsive. When they finish a turn, they notify the orchestrator (you) and wait for follow-up via `SendMessage` instead of shutting down.
 
-**Avoid when:** the items touch shared files (merge conflicts), or one worker's discovery should change how the others act (duplicated or wasted work). When in doubt, serialize — it's almost always better to do N things sequentially than to fight coordination problems.
+**Avoid when:** the items touch shared files (merge conflicts), or one worker's discovery drastically changes the baseline for others without a clear mechanism for the orchestrator to resolve it.
 
 ### 5. Do the agents need to react to each other's findings in real time?
 
-In Claude Code, this is a signal to **NOT delegate** — do it yourself.
+In Claude Code, you can now use the **Swarm/Team** infrastructure (`TeamCreate`, `SendMessage`) as a primitive **Message Bus**. 
 
-The **Shared State** pattern (agents reading/writing a common store) and **Message Bus** pattern (pub/sub routing) assume infrastructure that a single Claude Code session doesn't have. If you find yourself wanting either, what you actually want is usually:
+- The Orchestrator (you) receives idle notifications when agents finish a sub-task.
+- You can read their output files and use `SendMessage` to route findings or corrections to other agents (e.g., sending QA's bug report back to the Dev agent).
 
-- **Serial execution by you**, using a scratch file or TaskCreate to keep your own notes
-- **Plan-first**, then execute deterministically — write out the approach, then follow it
-
-If the investigation really is collaborative and compounding (one finding reshapes the next), a single agent doing it all beats any attempt to split it across isolated subagent contexts.
+However, if the investigation is highly collaborative and compounding at a granular, minute-by-minute level (one finding immediately reshapes the next), acting as a manual message bus is slow. In that case, **NOT delegate** — do it yourself.
 
 ## Common mistakes
 
