@@ -47,6 +47,15 @@ A specialized design agent that creates high-fidelity HTML/CSS/JS prototypes (us
 - **State Completeness**: Automatically mocks empty, loading, error, and success states for visual review before any backend engineering begins.
 - **Multi-Round Feedback**: Can be spawned in a Swarm. Goes idle when the prototype is ready, allowing the PM to review in their browser and send iterative feedback via `SendMessage`.
 
+### `/frontend-design`
+
+**The Dedicated Frontend Engineer**
+
+A standardized frontend design and component generation skill. It bridges the gap between raw UI prototypes (from `/ui-designer`) and production-ready React/Vue components.
+- **Component-Driven**: Enforces reusable, single-responsibility components with strict state management (Loading, Error, Success, Empty).
+- **Production-Ready**: Automatically manages a11y (accessibility), responsive design (mobile-first Tailwind/CSS), and semantic HTML.
+- **Swarm Ready**: Perfectly complements the `/ui-designer` and `/sdd-tdd` workflows. The Frontend Developer agent can stub out API calls with `setTimeout` mocks based on the SDD until the Backend developer finishes their part.
+
 ### `/sdd-tdd`
 
 Three-phase workflow: **Spec → Test → Implement**
