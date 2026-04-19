@@ -38,23 +38,14 @@ A specialized agent skill designed to enforce Test-Driven Development (TDD) and 
 - **Mode 2 (TDD Red)**: Reads SDDs/Specs to write failing test cases (unit/e2e/integration). Strictly prohibited from writing feature implementation.
 - **Mode 3 (TDD Green / Verify)**: Independently runs test suites and reports PASS/FAIL logs back to the orchestrator. Strictly prohibited from fixing bugs itself to maintain verification integrity.
 
-### `/ui-designer`
-
-**The Dedicated UI/UX Prototyping Agent**
-
-A specialized design agent that creates high-fidelity HTML/CSS/JS prototypes (using Tailwind CDN) directly from a PRD or Designer Brief.
-- **Zero-Build Prototypes**: Creates standalone HTML files in `docs/prototypes/<feature-slug>/index.html` that the PM can double-click and review instantly.
-- **State Completeness**: Automatically mocks empty, loading, error, and success states for visual review before any backend engineering begins.
-- **Multi-Round Feedback**: Can be spawned in a Swarm. Goes idle when the prototype is ready, allowing the PM to review in their browser and send iterative feedback via `SendMessage`.
-
 ### `/frontend-design`
 
-**The Dedicated Frontend Engineer**
+**The Distinctive Frontend Designer (Official Anthropic Skill)**
 
-A standardized frontend design and component generation skill. It bridges the gap between raw UI prototypes (from `/ui-designer`) and production-ready React/Vue components.
-- **Component-Driven**: Enforces reusable, single-responsibility components with strict state management (Loading, Error, Success, Empty).
-- **Production-Ready**: Automatically manages a11y (accessibility), responsive design (mobile-first Tailwind/CSS), and semantic HTML.
-- **Swarm Ready**: Perfectly complements the `/ui-designer` and `/sdd-tdd` workflows. The Frontend Developer agent can stub out API calls with `setTimeout` mocks based on the SDD until the Backend developer finishes their part.
+An officially maintained Anthropic skill integrated into the `PSkills` workflow. It guides the creation of distinctive, production-grade frontend interfaces that avoid generic "AI slop" aesthetics.
+- **Bold Design Aesthetics**: Prioritizes unique typography, extreme aesthetics (minimalism, brutalism, luxury), and memorable color palettes.
+- **Frontend Code Generation**: Creates actual, working HTML/CSS/JS or React/Vue components with meticulous attention to motion and layout.
+- **Swarm Integration**: Seamlessly works inside the `/prd-planner` and `/sdd-tdd` team Swarms. Replaces `/ui-designer` by creating full-fidelity, distinctive UI components.
 
 ### `/sdd-tdd`
 
