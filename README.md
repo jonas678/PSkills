@@ -23,9 +23,10 @@ The true power of PSkills is that these skills perfectly interlock using Claude 
 
 Here is the ultimate end-to-end workflow:
 
-### 👑 Stage 1: PM Planning (`/prd-planner`)
-You open the main Claude Code session and type `/prd-planner I want to build a user login feature`.
-Claude acts as your PM. It asks clarifying questions, scopes the MVP, and outputs a rock-solid `PRD.md` along with Role Briefs for the downstream agents.
+### 👑 Stage 1: PM Planning & Discovery (`/prd-planner` + `Explore` Agent)
+You open the main Claude Code session and type `/prd-planner I want to update our user login to add JWT`.
+Claude acts as your PM. For existing projects (Brownfield), it first spawns a **System Analyst** (using the `Explore` subagent) to map out how the code currently works, keeping your PM context clean. 
+Then, it asks clarifying questions, scopes the MVP, and outputs a rock-solid `PRD.md` with explicit "As-Is" and "To-Be" sections, along with Role Briefs for the downstream agents.
 
 ### 🚀 Stage 2: Swarm Initialization & Design (`TeamCreate` + `/frontend-design`)
 You tell Claude to execute the handoff. Claude uses `TeamCreate` to spawn a Swarm of agents in the background.

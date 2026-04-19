@@ -49,11 +49,20 @@ It is also an explanation of:
 
 ---
 
-## 3. What to establish before writing
+## 3. What to establish before writing (The "System Analyst" Phase)
 
-Before drafting the target plan, try to clarify:
+**CRITICAL RULE for existing codebases:** Do not guess the current implementation.
 
-### 3.1 Current state
+Before drafting the target plan, you must establish the exact "As-Is" state. If you are operating within Claude Code, **spawn a System Analyst using the `Agent` tool with `subagent_type: "Explore"`** to read the codebase for you.
+
+Brief the Explore Agent to:
+1. Search the codebase for the relevant feature (e.g., "Find how our authentication middleware currently works").
+2. Identify the exact files, database schemas, and API endpoints involved.
+3. Return a concise, high-level summary of the architecture and dependencies, avoiding massive raw code dumps.
+
+Once the Explore Agent returns with facts, you (the PM) can clarify:
+
+### 3.1 Current state (Based on the Analyst's findings)
 - What exists today?
 - Which page, module, workflow, or API is involved?
 - Who uses it now?
