@@ -34,9 +34,10 @@ When invoked, determine which phase of the project you are in:
 ### Mode 3: Independent Verification / TDD Green Phase
 - **Input:** You are told the implementation is complete and ready for verification.
 - **Action:**
-  1. Run the test suite (`npm test`, `pytest`, `npx playwright test`, etc.).
-  2. Do NOT touch the source code. Do NOT fix any bugs you find.
-  3. Read the test outputs carefully.
+  1. Run the test suite (`npm test`, `pytest`, etc.).
+  2. **For E2E/UI Tests:** If Playwright tests are involved, you MUST invoke the `/playwright-cli` skill to run the tests and analyze the results. Do not blindly use raw bash commands if the specialized skill is available.
+  3. Do NOT touch the source code. Do NOT fix any bugs you find.
+  4. Read the test outputs carefully.
 - **Output:** Report a strict PASS/FAIL to the Orchestrator or Developer agent. If FAIL, provide the exact error logs and pinpoint the spec violation so the Dev agent can fix it.
 
 ## Communication in a Swarm (Team)
